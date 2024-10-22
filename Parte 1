@@ -1,0 +1,203 @@
+# Encabezado del archivo con detalles
+"""
+Autor: Carlos Ulises Salas Moreno
+Carrera: Ingeniería en Inteligencia Artificial
+Última modificación: 21 de octubre de 2024
+Descripción: Este programa calcula varias medidas de desempeño a partir de predicciones y etiquetas verdaderas para un problema de clasificación binaria.
+"""
+
+# Función para calcular Accuracy
+def accuracy(y_true, y_pred):
+    """
+    Calcula el porcentaje de predicciones correctas.
+    
+    Parámetros:
+    y_true: Lista de etiquetas verdaderas.
+    y_pred: Lista de predicciones.
+    
+    Retorno:
+    float: Accuracy, porcentaje de predicciones correctas.
+    """
+    correct_predictions = sum(1 for true, pred in zip(y_true, y_pred) if true == pred)
+    return correct_predictions / len(y_true)
+
+# Función para calcular Error
+def error(y_true, y_pred):
+    """
+    Calcula el porcentaje de predicciones incorrectas.
+    
+    Parámetros:
+    y_true: Lista de etiquetas verdaderas.
+    y_pred: Lista de predicciones.
+    
+    Retorno:
+    float: Error, porcentaje de predicciones incorrectas.
+    """
+    incorrect_predictions = sum(1 for true, pred in zip(y_true, y_pred) if true != pred)
+    return incorrect_predictions / len(y_true)
+
+# Función para calcular la matriz de confusión
+def confusion_matrix(y_true, y_pred):
+    """
+    Calcula la matriz de confusión para un problema de dos clases.
+    
+    Parámetros:
+    y_true: Lista de etiquetas verdaderas.
+    y_pred: Lista de predicciones.
+    
+    Retorno:
+    tuple: (TP, FP, TN, FN), donde:
+           - TP: Verdaderos Positivos
+           - FP: Falsos Positivos
+           - TN: Verdaderos Negativos
+           - FN: Falsos Negativos
+    """
+    TP = FP = TN = FN = 0
+    for true, pred in zip(y_true, y_pred):
+        if true == 1 and pred == 1:
+            TP += 1
+        elif true == 1 and pred == 0:
+            FN += 1
+        elif true == 0 and pred == 0:
+            TN += 1
+        elif true == 0 and pred == 1:
+            FP += 1
+    return TP, FP, TN, FN
+
+# Función para calcular Precision
+def precision(TP, FP):
+    """
+    Calcula la precisión (Precision).
+    
+    Parámetros:
+    TP: Verdaderos Positivos.
+    FP: Falsos Positivos.
+    
+    Retorno:
+    float: Precisión.
+    """
+    return TP / (TP + FP) if (TP + FP) != 0 else 0
+
+# Función para calcular Recall (True Positive Rate)
+def recall(TP, FN):
+    """
+    Calcula el recall (o True Positive Rate).
+    
+    Parámetros:
+    TP: Verdaderos Positivos.
+    FN: Falsos Negativos.
+    
+    Retorno:
+    float: Recall.
+    """
+    return TP / (TP + FN) if (TP + FN) != 0 else 0
+
+# Función para calcular Positive Predictive Value (PPV)
+def positive_predictive_value(TP, FP):
+    """
+    Calcula el valor predictivo positivo (PPV).
+    
+    Parámetros:
+    TP: Verdaderos Positivos.
+    FP: Falsos Positivos.
+    
+    Retorno:
+    float: Valor predictivo positivo.
+    """
+    return precision(TP, FP)
+
+# Función para calcular True Positive Rate (TPR)
+def true_positive_rate(TP, FN):
+    """
+    Calcula la tasa de verdaderos positivos (TPR o Sensibilidad).
+    
+    Parámetros:
+    TP: Verdaderos Positivos.
+    FN: Falsos Negativos.
+    
+    Retorno:
+    float: Tasa de verdaderos positivos.
+    """
+    return recall(TP, FN)
+
+# Función para calcular True Negative Rate (TNR)
+def true_negative_rate(TN, FP):
+    """
+    Calcula la tasa de verdaderos negativos (TNR o Especificidad).
+    
+    Parámetros:
+    TN: Verdaderos Negativos.
+    FP: Falsos Positivos.
+    
+    Retorno:
+    float: Tasa de verdaderos negativos.
+    """
+    return TN / (TN + FP) if (TN + FP) != 0 else 0
+
+# Función para calcular False Positive Rate (FPR)
+def false_positive_rate(FP, TN):
+    """
+    Calcula la tasa de falsos positivos (FPR).
+    
+    Parámetros:
+    FP: Falsos Positivos.
+    TN: Verdaderos Negativos.
+    
+    Retorno:
+    float: Tasa de falsos positivos.
+    """
+    return FP / (FP + TN) if (FP + TN) != 0 else 0
+
+# Función para calcular False Negative Rate (FNR)
+def false_negative_rate(FN, TP):
+    """
+    Calcula la tasa de falsos negativos (FNR).
+    
+    Parámetros:
+    FN: Falsos Negativos.
+    TP: Verdaderos Positivos.
+    
+    Retorno:
+    float: Tasa de falsos negativos.
+    """
+    return FN / (FN + TP) if (FN + TP) != 0 else 0
+
+# Función para calcular F1-Score
+def f1_score(TP, FP, FN):
+    """
+    Calcula el F1-Score.
+    
+    Parámetros:
+    TP: Verdaderos Positivos.
+    FP: Falsos Positivos.
+    FN: Falsos Negativos.
+    
+    Retorno:
+    float: F1-Score.
+    """
+    prec = precision(TP, FP)
+    rec = recall(TP, FN)
+    return 2 * (prec * rec) / (prec + rec) if (prec + rec) != 0 else 0
+
+# Ejemplo de uso
+if __name__ == "__main__":
+    # Etiquetas verdaderas
+    y_true = [1, 0, 1, 1, 0, 1, 0, 0, 1, 0]
+
+    # Predicciones
+    y_pred = [1, 0, 1, 0, 0, 1, 1, 0, 1, 0]
+
+    # Calcular la matriz de confusión
+    TP, FP, TN, FN = confusion_matrix(y_true, y_pred)
+
+    # Calcular las medidas de desempeño
+    print("Accuracy:", accuracy(y_true, y_pred))
+    print("Error:", error(y_true, y_pred))
+    print("Precision:", precision(TP, FP))
+    print("Recall:", recall(TP, FN))
+    print("Positive Predictive Value:", positive_predictive_value(TP, FP))
+    print("True Positive Rate:", true_positive_rate(TP, FN))
+    print("True Negative Rate:", true_negative_rate(TN, FP))
+    print("False Positive Rate:", false_positive_rate(FP, TN))
+    print("False Negative Rate:", false_negative_rate(FN, TP))
+    print("F1-Score:", f1_score(TP, FP, FN))
