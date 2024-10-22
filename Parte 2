@@ -1,0 +1,30 @@
+# Parte II: Usando bibliotecas
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score
+
+# Cargar el dataset de Iris
+iris = datasets.load_iris()
+X, y = iris.data, iris.target
+
+# Convertimos a un problema binario (clases 0 y 1)
+X = X[y != 2]
+y = y[y != 2]
+
+# Dividimos en entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Usar un clasificador simple (ej. k-Nearest Neighbors)
+from sklearn.neighbors import KNeighborsClassifier
+clf = KNeighborsClassifier(n_neighbors=3)
+clf.fit(X_train, y_train)
+
+# Realizar predicciones
+y_pred = clf.predict(X_test)
+
+# Calcular las medidas de desempeño usando sklearn
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("Matriz de confusión:\n", confusion_matrix(y_test, y_pred))
+print("Precision:", precision_score(y_test, y_pred))
+print("Recall:", recall_score(y_test, y_pred))
+print("F1-Score:", f1_score(y_test, y_pred))
